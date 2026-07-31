@@ -1,8 +1,16 @@
 
 ### Escuela Colombiana de Ingeniería
 ### Arquitecturas de Software - ARSW
-## Ejercicio Introducción al paralelismo - Hilos - Caso BlackListSearch
 
+##### Integrantes del equipo:
+
+| Nombre                                                     | Rol        |
+|------------------------------------------------------------|------------|
+| [Juan David Valero Abril](https://github.com/Valero25)     | Estudiante |
+| [Juan Esteban Sanchez Garcia](https://github.com/juanesgl) | Estudiante |
+
+--- 
+## Ejercicio Introducción al paralelismo - Hilos - Caso BlackListSearch
 
 ### Dependencias:
 ####   Lecturas:
