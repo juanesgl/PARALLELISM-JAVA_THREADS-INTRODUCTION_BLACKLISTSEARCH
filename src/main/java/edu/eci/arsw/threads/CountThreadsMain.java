@@ -1,5 +1,7 @@
 package edu.eci.arsw.threads;
 
+import java.util.Scanner;
+
 /**
  *
  * @author juanesgl
@@ -8,20 +10,44 @@ package edu.eci.arsw.threads;
 
 public class CountThreadsMain {
     
-    public static void main(String a[]){
-        CountThread t1 = new CountThread(0,99);
-        CountThread t2 = new CountThread(99,199);
-        CountThread t3 = new CountThread(200,299);
-
-        /*
-        t1.start();
-        t2.start();
-        t3.start();
-        */
-
-        t1.run();
-        t2.run();
-        t3.run();
+    public static void main(String args[]){
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Ingrese el numero de hilos a crear:");
+        int numThreads = scanner.nextInt();
+        
+        CountThread[] threads = new CountThread[numThreads];
+        
+        for (int i = 0; i < numThreads; i++) {
+            System.out.println("Hilo " + (i + 1) + " - Ingrese el valor inicial (a):");
+            int a = scanner.nextInt();
+            System.out.println("Hilo " + (i + 1) + " - Ingrese el valor final (b):");
+            int b = scanner.nextInt();
+            
+            threads[i] = new CountThread(a, b);
+        }
+        
+        System.out.println("\n=== MENU DE EJECUCION ===");
+        System.out.println("1. Ejecutar con start() (hilos en paralelo)");
+        System.out.println("2. Ejecutar con run() (secuencial)");
+        System.out.print("Seleccione una opcion: ");
+        int opcion = scanner.nextInt();
+        
+        if (opcion == 1) {
+            System.out.println("\nEjecutando hilos con start()...\n");
+            for (CountThread thread : threads) {
+                thread.start();
+            }
+        } else if (opcion == 2) {
+            System.out.println("\nEjecutando hilos con run()...\n");
+            for (CountThread thread : threads) {
+                thread.run();
+            }
+        } else {
+            System.out.println("\nOpcion invalida. Saliendo...");
+        }
+        
+        scanner.close();
     }
 
 }
