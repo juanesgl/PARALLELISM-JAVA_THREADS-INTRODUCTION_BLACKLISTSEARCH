@@ -1,14 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.eci.arsw.threads;
+
+import java.util.stream.IntStream;
 
 /**
  *
- * @author hcadavid
+ * @author juanesgl
+ * @author Valero25
  */
-public class CountThread {
-    
+
+public class CountThread extends Thread {
+    private final int a;
+    private final int b;
+    public CountThread(int a, int b){
+        this.a = a;
+        this.b = b;
+    }
+    @Override
+    public void run() {
+        IntStream.range(a,b)
+                .forEach(x-> System.out.println(Thread.currentThread().getName() + " - Count: " + x));
+    }
 }
