@@ -29,7 +29,12 @@
 	3. Ejecute y revise la salida por pantalla. 
 	4. Cambie el inicio con 'start()' por 'run()'. Cómo cambia la salida?, ¿por qué?.
 
-###### [Respuestas de la parte 1](Respuestas/Parte1.md)
+---
+### RTA 
+
+[Respuestas de la parte 1](Respuestas/Parte1.md)
+
+---
 
 **Parte II - Ejercicio Black List Search**
 
