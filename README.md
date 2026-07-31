@@ -2,7 +2,7 @@
 ### Escuela Colombiana de Ingeniería
 ### Arquitecturas de Software - ARSW
 
-##### Integrantes del equipo:
+### Integrantes del equipo:
 
 | Nombre                                                     | Rol        |
 |------------------------------------------------------------|------------|
