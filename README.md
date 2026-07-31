@@ -34,6 +34,8 @@
 
 [Respuestas de la parte 1](Respuestas/Parte1.md)
 
+[Respuestas de la parte 2](Respuestas/Parte2.md)
+
 ---
 
 **Parte II - Ejercicio Black List Search**
