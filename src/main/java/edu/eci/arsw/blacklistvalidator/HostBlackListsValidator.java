@@ -30,27 +30,75 @@ public class HostBlackListsValidator {
      * @return  Blacklists numbers where the given host's IP address was found.
      */
     public List<Integer> checkHost(String ipaddress){
+        return checkHost(ipaddress, 1);
+    }
+    
+    /**
+     * Check the given host's IP address in all the available black lists using N threads,
+     * and report it as NOT Trustworthy when such IP was reported in at least
+     * BLACK_LIST_ALARM_COUNT lists, or as Trustworthy in any other case.
+     * 
+     * @param ipaddress suspicious host's IP address.
+     * @param N number of threads to use for the search
+     * @return  Blacklists numbers where the given host's IP address was found.
+     */
+    public List<Integer> checkHost(String ipaddress, int N){
         
         LinkedList<Integer> blackListOcurrences=new LinkedList<>();
         
-        int ocurrencesCount=0;
-        
         HostBlacklistsDataSourceFacade skds=HostBlacklistsDataSourceFacade.getInstance();
         
-        int checkedListsCount=0;
+        int totalServers = skds.getRegisteredServersCount();
         
-        for (int i=0;i<skds.getRegisteredServersCount() && ocurrencesCount<BLACK_LIST_ALARM_COUNT;i++){
-            checkedListsCount++;
+        // División de rangos entre N hilos
+        int serversPerThread = totalServers / N;
+        int residue = totalServers % N;
+        
+        BlackListThread[] threads = new BlackListThread[N];
+        int currentStart = 0;
+        
+        // Crear y configurar los N hilos
+        for (int i = 0; i < N; i++) {
+            int start = currentStart;
+            int end;
             
-            if (skds.isInBlackListServer(i, ipaddress)){
-                
-                blackListOcurrences.add(i);
-                
-                ocurrencesCount++;
+            // El último hilo recibe el residuo
+            if (i == N - 1) {
+                end = totalServers;
+            } else {
+                end = currentStart + serversPerThread;
             }
+            
+            threads[i] = new BlackListThread(start, end, ipaddress, skds);
+            currentStart = end;
         }
         
-        if (ocurrencesCount>=BLACK_LIST_ALARM_COUNT){
+        // Iniciar todos los hilos
+        for (BlackListThread thread : threads) {
+            thread.start();
+        }
+        
+        // Esperar a que todos los hilos terminen usando join()
+        try {
+            for (BlackListThread thread : threads) {
+                thread.join();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        // Recolectar resultados de todos los hilos
+        int ocurrencesCount = 0;
+        int checkedListsCount = 0;
+        
+        for (BlackListThread thread : threads) {
+            ocurrencesCount += thread.getOccurrencesCount();
+            blackListOcurrences.addAll(thread.getBlackListOccurrences());
+            checkedListsCount += thread.getCheckedListsCount();
+        }
+        
+        // Reportar según el número de ocurrencias
+        if (ocurrencesCount >= BLACK_LIST_ALARM_COUNT){
             skds.reportAsNotTrustworthy(ipaddress);
         }
         else{
