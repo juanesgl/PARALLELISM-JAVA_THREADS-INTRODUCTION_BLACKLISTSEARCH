@@ -121,14 +121,3 @@ INFO: Checked Black Lists:80.000 of 80.000
 Se puede probar con distintos números de hilos (1, 4, 8, 50, 100) y comparar el `Execution time` de cada uno.
 
 ---
-
-## Resumen técnico (en simple)
-
-| Concepto | Explicación sencilla |
-|---|---|
-| `BlackListThread` | Un "trabajador" que revisa solo su parte de las listas negras |
-| `checkHost(ip, N)` | Divide las 80.000 listas en N partes y lanza N trabajadores |
-| `join()` | El programa espera a que todos los trabajadores terminen antes de juntar resultados |
-| Residuo | Si la división no es exacta, el último trabajador revisa los servidores sobrantes |
-| `Thread.sleep` en la fachada | Latencia simulada de la "red"; es lo que hace lento el modo de 1 solo hilo |
-| `Execution time` | Tiempo que tardó toda la búsqueda; debe bajar al aumentar los hilos |
