@@ -2,12 +2,6 @@ package edu.eci.arsw.threads;
 
 import java.util.stream.IntStream;
 
-/**
- *
- * @author juanesgl
- * @author Valero25
- */
-
 public class CountThread extends Thread {
     private final int a;
     private final int b;

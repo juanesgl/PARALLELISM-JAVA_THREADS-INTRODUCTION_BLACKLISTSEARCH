@@ -21,14 +21,7 @@ public class BlackListThread extends Thread {
     private int occurrencesCount;
     private int checkedListsCount;
     
-    /**
-     * Constructor del hilo de búsqueda en listas negras
-     * 
-     * @param startIndex Índice inicial del rango de búsqueda (inclusivo)
-     * @param endIndex Índice final del rango de búsqueda (exclusivo)
-     * @param ipAddress Dirección IP a buscar
-     * @param skds Instancia del facade para acceder a las listas negras
-     */
+
     public BlackListThread(int startIndex, int endIndex, String ipAddress, HostBlacklistsDataSourceFacade skds) {
         this.startIndex = startIndex;
         this.endIndex = endIndex;
@@ -41,7 +34,6 @@ public class BlackListThread extends Thread {
     
     @Override
     public void run() {
-        // Buscar en el rango asignado [startIndex, endIndex)
         for (int i = startIndex; i < endIndex; i++) {
             checkedListsCount++;
             
@@ -51,30 +43,15 @@ public class BlackListThread extends Thread {
             }
         }
     }
-    
-    /**
-     * Obtiene el número de ocurrencias encontradas por este hilo
-     * 
-     * @return Número de ocurrencias encontradas
-     */
+
     public int getOccurrencesCount() {
         return occurrencesCount;
     }
-    
-    /**
-     * Obtiene la lista de índices de listas negras donde se encontró la IP
-     * 
-     * @return Lista de índices de listas negras
-     */
+
     public List<Integer> getBlackListOccurrences() {
         return blackListOccurrences;
     }
-    
-    /**
-     * Obtiene el número de listas revisadas por este hilo
-     * 
-     * @return Número de listas revisadas
-     */
+
     public int getCheckedListsCount() {
         return checkedListsCount;
     }

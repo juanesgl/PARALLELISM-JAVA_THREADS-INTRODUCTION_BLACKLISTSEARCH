@@ -7,27 +7,22 @@ package edu.eci.arsw.blacklistvalidator;
 
 import java.util.List;
 
-/**
- *
- * @author hcadavid
- */
 public class Main {
     
     public static void main(String a[]){
+
         HostBlackListsValidator hblv = new HostBlackListsValidator();
-        
-        // Dirección IP a verificar
+
         String ipAddress = "200.24.34.55";
-        
-        // Número de hilos a usar (puedes cambiar este valor para experimentar)
-        int numberOfThreads = 1;
-        
-        // Si se proporciona argumento, usar ese número de hilos
+
+        int numberOfThreads = Runtime.getRuntime().availableProcessors();
+        // int numberOfThreads = Runtime.getRuntime().availableProcessors() * 2;
+
         if (a.length > 0) {
             try {
                 numberOfThreads = Integer.parseInt(a[0]);
             } catch (NumberFormatException e) {
-                System.err.println("Argumento invalido. Usando 1 hilo por defecto.");
+                System.err.println("Argumento invalido. Usando hilos según núcleos disponibles (" + numberOfThreads + ").");
             }
         }
         
@@ -35,8 +30,7 @@ public class Main {
         System.out.println("Checking IP: " + ipAddress);
         System.out.println("Number of threads: " + numberOfThreads);
         System.out.println("================================================");
-        
-        // Medir tiempo de ejecución
+
         long startTime = System.currentTimeMillis();
         
         List<Integer> blackListOcurrences = hblv.checkHost(ipAddress, numberOfThreads);

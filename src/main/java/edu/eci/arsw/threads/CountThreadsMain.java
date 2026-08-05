@@ -2,19 +2,11 @@ package edu.eci.arsw.threads;
 
 import java.util.Scanner;
 
-/**
- *
- * @author juanesgl
- * @author Valero25
- */
 
 public class CountThreadsMain {
     
     private static final int NUM_THREADS = 3;
-    
-    /**
-     * Método auxiliar para leer un entero con validación
-     */
+
     private static int leerEntero(Scanner scanner, String mensaje) {
         Integer numero = null;
         while (numero == null) {
@@ -29,7 +21,7 @@ public class CountThreadsMain {
                 }
             } catch (Exception e) {
                 System.out.println("Error en la entrada. Por favor ingrese un numero entero.\n");
-                scanner.next(); // Limpiar el buffer
+                scanner.next();
             }
         }
         return numero;
@@ -40,8 +32,7 @@ public class CountThreadsMain {
         
         System.out.println("=== CONTADOR DE HILOS ===");
         System.out.println("Numero de hilos a utilizar: " + NUM_THREADS);
-        
-        // Solicitar rango total con validación
+
         int rangoInicio = 0, rangoFin = 0;
         boolean rangoValido = false;
         
@@ -58,8 +49,7 @@ public class CountThreadsMain {
                 rangoValido = true;
             }
         }
-        
-        // División automática con residuo en el último hilo
+
         int rangoTotal = rangoFin - rangoInicio;
         int tamañoPorHilo = rangoTotal / NUM_THREADS;
         int residuo = rangoTotal % NUM_THREADS;
@@ -79,10 +69,8 @@ public class CountThreadsMain {
         for (int i = 0; i < NUM_THREADS; i++) {
             int a = inicioActual;
             int b;
-            
-            // El último hilo recibe el residuo (si hay)
             if (i == NUM_THREADS - 1) {
-                b = rangoFin; // El último hilo llega hasta el final
+                b = rangoFin;
             } else {
                 b = inicioActual + tamañoPorHilo;
             }
@@ -92,8 +80,7 @@ public class CountThreadsMain {
             
             inicioActual = b;
         }
-        
-        // Menú para elegir método de ejecución
+
         System.out.println("\n=== MENU DE EJECUCION ===");
         System.out.println("1. Ejecutar con start() (hilos en paralelo)");
         System.out.println("2. Ejecutar con run() (secuencial)");
