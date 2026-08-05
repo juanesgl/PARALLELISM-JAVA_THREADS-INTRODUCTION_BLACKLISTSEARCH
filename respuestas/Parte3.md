@@ -24,7 +24,7 @@
 
 ![Thread 4](../img/parte3/thread5.png)
 
-![Tiempo total con doble de threads disponibles](../img/parte3/thread5.png)
+![Tiempo total con doble de threads disponibles](../img/parte3/thread6.png)
 
 --- 
 

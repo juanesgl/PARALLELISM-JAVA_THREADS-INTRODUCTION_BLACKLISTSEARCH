@@ -10,6 +10,22 @@
 | [Juan Esteban Sanchez Garcia](https://github.com/juanesgl) | Estudiante |
 
 --- 
+
+### Respuestas de cada parte
+
+[Respuestas de la parte 1](respuestas/Parte1.md)
+
+[Respuestas de la parte 2](respuestas/Parte2.md)
+
+
+[Respuestas de la parte 3](respuestas/Parte3.md)
+
+
+[Respuestas de la parte 4](respuestas/Parte4.md)
+
+---
+
+--- 
 ## Ejercicio Introducción al paralelismo - Hilos - Caso BlackListSearch
 
 ### Dependencias:
@@ -28,13 +44,6 @@
 	2. Inicie los tres hilos con 'start()'.
 	3. Ejecute y revise la salida por pantalla. 
 	4. Cambie el inicio con 'start()' por 'run()'. Cómo cambia la salida?, ¿por qué?.
-
----
-### RTA 
-
-[Respuestas de la parte 1](Respuestas/Parte1.md)
-
-[Respuestas de la parte 2](Respuestas/Parte2.md)
 
 ---
 
