@@ -166,24 +166,12 @@ Si el overhead supera el beneficio de tener más hilos, el rendimiento se degrad
 #### Hipótesis 3: Contención en recursos compartidos
 Aunque la fachada es "Thread-Safe", internamente puede tener secciones críticas protegidas con `synchronized`. Con 24 hilos, puede haber más contención (hilos esperando a que otro libere un lock), lo que serializa parcialmente la ejecución.
 
-**Conclusión:** Este resultado refuerza que **más hilos no siempre significa mejor rendimiento**. Existe un punto óptimo que depende de la naturaleza del problema (CPU-bound vs I/O-bound) y las características del hardware.
-
----
-
-## Recomendaciones
-
-1. **Para este problema específico (I/O-bound simulado):** Usar entre 50-100 hilos maximiza el throughput aprovechando los tiempos de espera.
-
-2. **Para problemas CPU-bound:** Usar un número de hilos igual al número de núcleos disponibles (12 en esta máquina) es lo más eficiente.
-
-3. **Para producción:** Realizar múltiples mediciones en condiciones controladas y promediar los resultados para evitar conclusiones basadas en anomalías puntuales.
-
-4. **Monitoreo continuo:** Usar herramientas como jVisualVM para detectar cuellos de botella (GC, memory leaks, thread contention).
+**Conclusión:** Este resultado refuerza que más hilos no siempre significa mejor rendimiento. Existe un punto óptimo que depende de la naturaleza del problema (CPU-bound vs I/O-bound) y las características del hardware.
 
 ---
 
 ## Conclusión
 
-Los experimentos demuestran que el paralelismo **mejora drásticamente el rendimiento** para problemas embarazosamente paralelos. El speedup de 349x con 100 hilos vs ejecución secuencial valida la estrategia de refactorización implementada en la Parte II.
+Los experimentos demuestran que el paralelismo mejora drásticamente el rendimiento para problemas embarazosamente paralelos. El speedup de 349x con 100 hilos vs ejecución secuencial valida la estrategia de refactorización implementada en la Parte II.
 
 Sin embargo, los resultados también evidencian que el comportamiento real del sistema es más complejo que los modelos teóricos (Ley de Amdahl), y factores como latencia de I/O, overhead de sincronización y condiciones ambientales juegan un rol crítico en el desempeño observado.
