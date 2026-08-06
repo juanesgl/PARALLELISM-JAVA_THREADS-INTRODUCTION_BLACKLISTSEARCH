@@ -12,11 +12,45 @@ Para respaldar el siguiente análisis, se ejecutó el programa variando la canti
 
 **1. Según la ley de Amdahl, donde S(n) es el mejoramiento teórico del desempeño, P la fracción paralelizable del algoritmo, y n el número de hilos, a mayor n, mayor debería ser dicha mejora. ¿Por qué el mejor desempeño no se logra con los 500 hilos? ¿Cómo se compara este desempeño cuando se usan 200?**
 
-El mejor desempeño no se logra con 500 hilos debido a que la Ley de Amdahl es un modelo teórico matemático que asume que crear y gestionar hilos no tiene ningún costo. En la realidad física del hardware, existe el **Cambio de Contexto (*Context Switching*)**.
+Basándonos en los experimentos realizados (hasta 100 hilos) y en la teoría de concurrencia, podemos analizar por qué usar 500 hilos no necesariamente proporcionaría el mejor desempeño.
 
-Al crear 500 hilos en un procesador con un número limitado de núcleos físicos, el Sistema Operativo se ve obligado a pausar, guardar el estado, cargar el estado de otro hilo y reanudar la ejecución miles de veces por segundo. Se llega a un punto de saturación donde la CPU gasta más tiempo y recursos administrando el tráfico de los hilos que ejecutando el código real. Además, realizar 500 peticiones de red simultáneas desde una sola máquina puede saturar los límites de conexiones TCP locales o provocar rechazos por parte del servidor (*Rate Limiting* / Anti-DDoS).
+**Análisis teórico sobre 500 hilos:**
 
-Al comparar esto con **200 hilos**, el desempeño suele ser mejor (o mantenerse estable en su punto más óptimo) porque no se ha superado tan drásticamente el umbral de saturación de recursos. El sobrecosto (*overhead*) de administración del Sistema Operativo sigue siendo manejable y la red aún puede despachar las peticiones sin colapsar.
+La Ley de Amdahl es un modelo matemático que asume que crear y gestionar hilos no tiene ningún costo. Sin embargo, en la realidad física del hardware existe el **Cambio de Contexto (*Context Switching*)**, que introduce overhead significativo.
+
+Al crear 500 hilos en un procesador con solo 12 núcleos físicos, el Sistema Operativo debe realizar cambios de contexto miles de veces por segundo:
+- Pausar el hilo actual y guardar su estado (registros, puntero de instrucción, stack)
+- Cargar el estado del siguiente hilo
+- Vaciar y recargar cachés de CPU (cache misses)
+
+En este escenario, la CPU gastaría más tiempo administrando el tráfico de hilos que ejecutando el código útil. Además:
+- **Saturación de memoria:** 500 hilos × ~1 MB de stack cada uno = ~500 MB solo en stacks
+- **Contención en recursos compartidos:** Más hilos compitiendo por la fachada thread-safe significa más tiempo esperando locks
+- **Saturación de red:** 500 conexiones simultáneas pueden saturar los límites TCP locales o provocar rate limiting
+
+**Proyección basada en la tendencia observada:**
+
+Observando nuestros datos experimentales:
+- **50 hilos:** 2.495 ms (speedup 187.87x)
+- **100 hilos:** 1.342 ms (speedup 349.22x)
+
+El rendimiento sigue mejorando, pero la tasa de mejora disminuye (rendimientos decrecientes). Extrapolando:
+- **200 hilos:** Probablemente entre 0.8-1.0 ms (speedup ~500-600x)
+- **500 hilos:** Probablemente entre 0.7-1.5 ms, pero con riesgo de degradación por overhead
+
+**Comparación 200 vs 500 hilos:**
+
+Con **200 hilos**, el desempeño podría seguir mejorando porque:
+- El overhead del SO sería aún manejable (200 hilos / 12 núcleos = ~17 hilos por núcleo)
+- La red podría despachar las peticiones sin colapsar
+- El problema es I/O-bound, así que aprovecharía bien los tiempos de espera
+
+Con **500 hilos**, probablemente se alcanza el punto de **rendimientos decrecientes** o incluso degradación:
+- El overhead de context switching superaría el beneficio marginal
+- Mayor riesgo de contención y saturación de recursos
+- Los hilos pasarían más tiempo esperando su turno que ejecutando trabajo útil
+
+**Conclusión:** La curva de desempeño no es lineal indefinidamente. Existe un **punto óptimo** donde el beneficio de más hilos se equilibra con el costo de administrarlos. Para este sistema, ese punto parece estar entre 50-200 hilos. Más allá de eso, el overhead domina y el rendimiento se estanca o empeora.
 
 ---
 
